@@ -1,0 +1,34 @@
+LOGISTICS CLEANING LOG
+====================================================================================================
+A1. KEPT 261,831 duplicate geolocation rows as frequency weight (no entity id in this table - repeats are address density)
+A2. dropped 42 coordinates outside Brazil's bounding box
+A3. dropped 8 rows whose state disagrees with the rest of their zip prefix (8 prefixes affected)
+A4. dropped 2,718 pings more than 50 km from their prefix's densest coordinate (geocoder resolved an ambiguous Brazilian place name to the wrong city)
+A5. collapsed 997,395 weighted pings -> 19,010 zip-prefix centroids (median lat/lng); 2,768 rows removed in total
+B1. normalised city names (lowercase, trimmed, accents stripped)
+B2. geocoded customers: 99.72% matched
+B3. geocoded sellers  : 99.77% matched
+B4. filled 279 customers and 7 sellers with state centroids (flagged in *_geo_source)
+B5. mapped states to Brazil's 5 macro-regions
+C1. converted 4 zero-gram weights to NaN (physically impossible)
+C2. imputed 12 missing weight/dimension values (category median -> global median)
+C3. derived volume_cm3, weight_kg, volumetric_weight_kg, billable_weight_kg
+C4. translated categories to English (0 still unnamed)
+D1. flagged 6 orders as 'canceled_but_delivered'
+D2. flagged 8 orders as 'delivered_no_date'
+D3a. nulled 166 carrier dates that precede the purchase (impossible)
+D3b. nulled 23 carrier dates that postdate the delivery (impossible)
+D4. flagged 1193 orders where approval was logged after carrier pickup (kept: total delivery time is unaffected)
+E1. built 4 journey legs: approval_hours, seller_handover_days, carrier_transit_days, total_delivery_days
+E2. built estimated_days, delay_days, is_late, estimate_buffer_days
+E3. built calendar features (month, day-of-week, hour)
+E4. computed seller->customer haversine distance for 100.00% of line items (median 433 km)
+E5. built freight_ratio, freight_per_kg, freight_per_km; flagged 383 free-shipping line items
+E6. built same_state (36.2% of items ship within one state) and region->region route labels
+E7. built seller_sla_hours / seller_missed_sla (9.2% of line items late to carrier)
+E8. rolled item features up to order level -> (99441, 42)
+F1. is_analysable_delivery = True for 96,470 orders (97.0% of all 99,441)
+F2. total_delivery_days: winsorised at p99.5 = 54.1 for plotting (483 orders above cap, originals retained)
+F2. carrier_transit_days: winsorised at p99.5 = 48.9 for plotting (482 orders above cap, originals retained)
+F2. seller_handover_days: winsorised at p99.5 = 21.7 for plotting (488 orders above cap, originals retained)
+F2. max_distance_km: winsorised at p99.5 = 2682.4 for plotting (494 orders above cap, originals retained)
