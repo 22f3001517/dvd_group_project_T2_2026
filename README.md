@@ -45,6 +45,7 @@ python notebooks/04_logistics_clean.py         # apply + log the cleaning rules
 python notebooks/05_logistics_eda.py           # ten analyses + seller scorecard
 python notebooks/06_logistics_charts.py        # figures 01-09
 python notebooks/10_logistics_maps.py          # figure 10 (choropleths)
+python notebooks/12_retention_padding_text.py  # retention, padding, text mining
 ```
 
 | Script | What it does |
@@ -54,7 +55,38 @@ python notebooks/10_logistics_maps.py          # figure 10 (choropleths)
 | `05_logistics_eda.py` | Ten analyses: journey decomposition, promise vs reality, blame attribution, distance, route matrix, state scorecard, satisfaction, freight economics, time trend, seller scorecard. |
 | `06_logistics_charts.py` | Figures 01–09. |
 | `10_logistics_maps.py` | Figure 10 — state-level choropleths of delivery time and freight burden. |
+| `12_retention_padding_text.py` | Three enquiries behind the sustainable-growth storyline — see below. |
 | `src/vizstyle.py` | Shared palette and matplotlib defaults so every figure reads as one system. |
+
+### Retention, padding and text mining (`12_...`)
+
+Three tests, each built to survive the obvious objection:
+
+- **Retention forensics.** A cohort test with a *fixed* observation window, so
+  censoring cannot explain the result. Repeat purchase is 0.66% at 30 days and
+  still only 3.29% with a full year of observable window. Those who do return
+  come back fast (median 73 days), so it is not a slow repurchase cycle.
+- **The padding test.** Holds *actual* delivery speed constant and varies only
+  the promise length. Padding turns out to be expectation *insurance*, not
+  expectation management — once an order is on time, promise length barely
+  moves satisfaction (r = −0.066).
+- **Text mining** over 40,977 Portuguese review comments: accent-stripped and
+  tokenised, then tagged with keyword dictionaries for delivery, product,
+  wrong-item, incomplete-order and praise themes.
+
+**On the text dictionaries.** Every tag is validated against the delivery
+timestamps rather than trusted — a delivery-complaint tag should fire far more
+often on genuinely late orders, and a praise tag far less. The first version of
+the `late / waiting` tag **failed** that check (0.94× lift) because it used the
+bare word *prazo*, which is the neutral Portuguese for "deadline" — so
+*"chegou no prazo"* ("arrived on time") was being counted as a complaint. The
+committed version uses only unambiguous markers and passes at 2.98× lift. If you
+extend these dictionaries, re-run the validation block at the bottom of the
+script; a tag sitting near 1.0× lift is picking up noise.
+
+Two caveats when quoting the text results: only 41.3% of reviews carry text, and
+writing skews heavily to the unhappy (76.5% of 1-star reviewers write, vs 35.9%
+of 5-star), so theme percentages describe *reviewers who wrote*, not customers.
 
 ### Two output tables
 
