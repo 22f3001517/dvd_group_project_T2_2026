@@ -127,3 +127,54 @@ The full audit trail is in `output/04_cleaning_log.txt`. The judgment calls:
 state code) is committed so the maps reproduce offline. Sourced from the public
 [geodata-br-states](https://github.com/giuliano-macedo/geodata-br-states)
 repository. It is parsed as data only.
+
+---
+
+## Products workstream — catalog, pricing & revenue mix
+
+Covers the product catalog itself: category structure, pricing behaviour,
+and how catalog composition connects to revenue and customer satisfaction.
+
+### Running the pipeline
+
+This workstream runs in Google Colab rather than locally.
+
+1. Open `notebooks/products_dataset_eda.py` in Colab (or use the badge below).
+2. Upload the e-commerce dataset when prompted (see the "Getting set up"
+   section above for the expected file structure), or mount Google Drive if
+   the CSVs are already stored there.
+3. Run all cells top to bottom — cleaning, merging, EDA, and figures are all
+   produced inline in the notebook.
+
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/<your-org>/dvd_group_project_T2_2026/blob/main/notebooks/products_eda.ipynb)
+
+| Notebook | What it does |
+|---|---|
+| `products_dataset_eda.py` | Diagnoses data-quality defects, applies and logs the cleaning rules, merges the products table with `order_items`/`orders`/`product_category_name_translation`, and runs the full EDA: category revenue concentration, price distribution by category, catalog size vs. revenue, weight-freight relationship and review score by category. Produces figures 01–06 inline. |
+
+### Cleaning decisions worth knowing about
+
+The judgment calls, made inline in the notebook:
+
+- **610 rows (1.85%) dropped** — missing category, name-length,
+  description-length, and photo-qty together on the same rows. These are
+  incomplete listings, not isolated gaps, so imputing them would fabricate
+  content that was never captured.
+- **2 rows (0.01%) median-imputed** for missing weight/dimensions —
+  negligible share, no material risk.
+- **13 categories had no match** in the standard translation table. 2
+  (`pc_gamer`, `portateis_cozinha_e_preparadores_de_alimentos`) were manually
+  translated; the remaining 11 fell back to their original Portuguese name
+  rather than being dropped, since the category itself is still valid, just
+  untranslated.
+- **0 orphaned products** — every product in the cleaned catalog matched at
+  least one order after merging with `order_items`/`orders`.
+
+### Output
+
+The notebook produces a cleaned, merged products table (32,341 products,
+98.1% of the raw catalog) flagged `is_analysable_product` — True for products
+with a complete, English-labelled category. Filter on it for any
+category-level analysis so no chart silently mixes an incomplete listing in.
+
+---
