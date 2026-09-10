@@ -139,18 +139,16 @@ and how catalog composition connects to revenue and customer satisfaction.
 
 This workstream runs in Google Colab rather than locally.
 
-1. Open `notebooks/products_dataset_eda.py` in Colab (or use the badge below).
+1. Open `notebooks/products_dataset_eda.py` in Colab.
 2. Upload the e-commerce dataset when prompted (see the "Getting set up"
    section above for the expected file structure), or mount Google Drive if
    the CSVs are already stored there.
 3. Run all cells top to bottom — cleaning, merging, EDA, and figures are all
    produced inline in the notebook.
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/<your-org>/dvd_group_project_T2_2026/blob/main/notebooks/products_eda.ipynb)
-
 | Notebook | What it does |
 |---|---|
-| `products_dataset_eda.py` | Diagnoses data-quality defects, applies and logs the cleaning rules, merges the products table with `order_items`/`orders`/`product_category_name_translation`, and runs the full EDA: category revenue concentration, price distribution by category, catalog size vs. revenue, weight-freight relationship and review score by category. Produces figures 01–06 inline. |
+| `products_dataset_eda.py` | Diagnoses data-quality defects, applies and logs the cleaning rules, merges the products table with `order_items`/`orders`/`product_category_name_translation`, and runs the full EDA: category revenue concentration, price distribution by category, catalog size vs. revenue, weight-freight relationship and review score by category. Produces figures 01–05 inline. |
 
 ### Cleaning decisions worth knowing about
 
